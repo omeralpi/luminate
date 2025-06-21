@@ -32,13 +32,13 @@ export const postRouter = router({
         .input(z.object({
             title: z.string(),
             content: z.any(),
+            cover: z.string().optional(),
         }))
         .mutation(async ({ input, ctx }) => {
-            const { title, content } = input;
-
             const post = await db.insert(posts).values({
-                title,
-                content,
+                title: input.title,
+                content: input.content,
+                cover: input.cover,
                 userId: ctx.session.user.id,
             });
 
