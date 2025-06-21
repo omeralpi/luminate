@@ -1,3 +1,5 @@
+import { AppHeader } from "@/components/app-header";
+
 export default function Layout({
     children
 }: {
@@ -5,6 +7,7 @@ export default function Layout({
 }) {
     return (
         <div>
+            <AppHeader />
             {children}
         </div>
     );

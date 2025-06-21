@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { truncateWalletAddress } from "@/lib/utils"
 import { LogOut, Settings, User } from "lucide-react"
+import Link from "next/link"
 
 interface UserDropdownProps {
     user: {
@@ -47,13 +48,17 @@ export function UserDropdown({ user, onLogout }: UserDropdownProps) {
                     </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                    <User className="mr-2 h-4 w-4" />
-                    <span>View your profile</span>
+                <DropdownMenuItem asChild>
+                    <Link href={`/profile/${user.walletAddress}`}>
+                        <User className="mr-2 h-4 w-4" />
+                        <span>View your profile</span>
+                    </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                    <Settings className="mr-2 h-4 w-4" />
-                    <span>Settings</span>
+                <DropdownMenuItem asChild>
+                    <Link href="/settings">
+                        <Settings className="mr-2 h-4 w-4" />
+                        <span>Settings</span>
+                    </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={onLogout}>

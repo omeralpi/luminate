@@ -1,3 +1,4 @@
+import { SiteHeader } from "@/components/site-header";
 
 export default function Layout({
     children
@@ -6,6 +7,7 @@ export default function Layout({
 }) {
     return (
         <div>
+            <SiteHeader />
             <div className="container">
                 {children}
             </div>
