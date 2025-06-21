@@ -1,4 +1,4 @@
-import { SiteHeader } from '@/components/site-header';
+
 import { TRPCProvider } from '@/trpc/client';
 import { Geist_Mono, Martian_Mono } from 'next/font/google';
 import "./globals.css";
@@ -21,10 +21,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${martian_mono.variable} ${geist_mono.variable}`}>
+    <html lang="en" className={`${martian_mono.style} ${geist_mono.variable}`}>
       <body>
         <TRPCProvider>
-          <SiteHeader />
           {children}
         </TRPCProvider>
       </body>

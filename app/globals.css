@@ -58,6 +58,8 @@
 }
 
 :root {
+  --default-font-family: var(--text-family);
+
   --display-weight: 200;
   --text-weight: 300;
 
