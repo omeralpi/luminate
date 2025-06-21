@@ -8,7 +8,9 @@ export default function Layout({
     return (
         <div>
             <AppHeader />
-            {children}
+            <div className="container">
+                {children}
+            </div>
         </div>
     );
 }

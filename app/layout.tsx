@@ -1,18 +1,17 @@
 
 import { TRPCProvider } from '@/trpc/client';
-import { Geist_Mono, Martian_Mono } from 'next/font/google';
+import { DM_Sans, Geist_Mono } from 'next/font/google';
 import "./globals.css";
 
-const martian_mono = Martian_Mono({
+const martian_mono = DM_Sans({
   subsets: ['latin'],
-  weight: ['200'],
-  variable: '--display-family',
+  variable: '--text-family',
 });
 
 const geist_mono = Geist_Mono({
   subsets: ['latin'],
   weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
-  variable: '--text-family',
+  variable: '--display-family',
 });
 
 export default function RootLayout({
@@ -21,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${martian_mono.style} ${geist_mono.variable}`}>
+    <html lang="en" className={`${martian_mono.variable} ${geist_mono.className}`}>
       <body>
         <TRPCProvider>
           {children}

@@ -35,7 +35,7 @@ export function Editor({
   onSerializedChange?: (editorSerializedState: SerializedEditorState) => void
 }) {
   return (
-    <div className="bg-background overflow-hidden rounded-lg border shadow min-h-[calc(100vh-100px)]">
+    <div className="bg-background overflow-hidden rounded-lg">
       <LexicalComposer
         initialConfig={{
           ...editorConfig,

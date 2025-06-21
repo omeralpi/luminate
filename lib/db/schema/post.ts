@@ -5,6 +5,7 @@ import { users } from "./user"
 export const posts = pgTable("posts", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
+  subTitle: text("sub_title"),
   content: text("content").notNull(),
   cover: text("cover"),
   userId: integer("user_id").references(() => users.id).notNull(),

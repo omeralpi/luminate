@@ -13,22 +13,24 @@ export default function Page() {
 
     return (
         <div className="flex divide-x">
-            <div className="flex-1 py-6 pr-8 divide-y flex flex-col justify-center">
+            <div className="flex-1 py-6 pr-8 flex flex-col justify-center">
                 <Tabs defaultValue="for-you">
                     <TabsList>
                         <TabsTrigger value="for-you">For you</TabsTrigger>
                         <TabsTrigger value="subscriptions">Subscriptions</TabsTrigger>
                     </TabsList>
                 </Tabs>
-                {isFetching ? [...Array(10)].map((_, index) => (
-                    <PostCardSkeleton key={index} />
-                )) : (
-                    posts.map((post) => (
-                        <Link href={`/post/${post.id}`} key={post.id}>
-                            <PostCard post={post} />
-                        </Link>
-                    ))
-                )}
+                <div className="divide-y">
+                    {isFetching ? [...Array(10)].map((_, index) => (
+                        <PostCardSkeleton key={index} />
+                    )) : (
+                        posts.map((post) => (
+                            <Link href={`/post/${post.id}`} key={post.id}>
+                                <PostCard post={post} />
+                            </Link>
+                        ))
+                    )}
+                </div>
             </div>
             <div className="w-[400px] py-6 pl-8">
                 <Button className="w-full" size='lg' variant={'outline'}>

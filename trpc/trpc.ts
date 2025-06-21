@@ -25,7 +25,6 @@ const isAuthedMiddleware = t.middleware(async ({ ctx, next }) => {
     if (!user) {
         throw new Error("Unauthorized");
     }
-
     const [fullUser] = await db.select()
         .from(users)
         .where(eq(users.id, Number(user.id)));

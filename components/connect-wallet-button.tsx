@@ -3,16 +3,9 @@
 import { useWallet } from "@/hooks/use-wallet";
 import { Loader2 } from "lucide-react";
 import { Button } from "./ui/button";
-import { UserDropdown } from "./user-dropdown";
 
 export function ConnectWalletButton() {
-    const { walletAddress, user, isAuthenticated, isSessionLoading, error, connectWallet, disconnect } = useWallet();
-
-    if (isAuthenticated && walletAddress) {
-        return (
-            <UserDropdown user={user!} onLogout={disconnect} />
-        );
-    }
+    const { isSessionLoading, error, connectWallet } = useWallet();
 
     return (
         <div className="flex flex-col items-center gap-2">

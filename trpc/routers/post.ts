@@ -31,12 +31,14 @@ export const postRouter = router({
     create: protectedProcedure
         .input(z.object({
             title: z.string(),
+            subTitle: z.string().optional(),
             content: z.any(),
             cover: z.string().optional(),
         }))
         .mutation(async ({ input, ctx }) => {
             const post = await db.insert(posts).values({
                 title: input.title,
+                subTitle: input.subTitle,
                 content: input.content,
                 cover: input.cover,
                 userId: ctx.session.user.id,

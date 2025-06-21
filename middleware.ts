@@ -19,13 +19,13 @@ export async function middleware(request: NextRequest) {
         }
     }
 
-    if (isAuthenticated && pathname === '/') {
-        return NextResponse.redirect(new URL('/explore', request.url));
-    }
+    // if (isAuthenticated && pathname === '/') {
+    //     return NextResponse.redirect(new URL('/explore', request.url));
+    // }
 
-    if (!isAuthenticated && pathname !== '/') {
-        return NextResponse.redirect(new URL('/', request.url));
-    }
+    // if (!isAuthenticated && pathname !== '/') {
+    //     return NextResponse.redirect(new URL('/', request.url));
+    // }
 
     return NextResponse.next();
 }

@@ -1,4 +1,3 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import {
     DropdownMenu,
@@ -11,6 +10,7 @@ import {
 import { truncateWalletAddress } from "@/lib/utils"
 import { LogOut, Settings, User } from "lucide-react"
 import Link from "next/link"
+import { UserAvatar } from "./user-avatar"
 
 interface UserDropdownProps {
     user: {
@@ -29,11 +29,8 @@ export function UserDropdown({ user, onLogout }: UserDropdownProps) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-9 w-9 border">
-                    <Avatar className="h-9 w-9">
-                        <AvatarImage src={user.avatar || undefined} alt={user.name || "User"} />
-                        <AvatarFallback>{initials}</AvatarFallback>
-                    </Avatar>
+                <Button variant="ghost" className="relative h-9 w-9 rounded-full">
+                    <UserAvatar user={user} />
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="end" forceMount>

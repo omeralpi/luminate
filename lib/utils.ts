@@ -27,3 +27,28 @@ export function truncateWalletAddress(
 
   return `${start}...${end}`;
 }
+
+export function stripHtml(html: string): string {
+  let text = html.replace(/<\/?[^>]+(>|$)/g, "");
+
+  // &nbsp;, &amp; gibi entity’leri temizle
+  text = text.replace(/&nbsp;/g, " ");
+  text = text.replace(/&amp;/g, "&");
+  text = text.replace(/&lt;/g, "<");
+  text = text.replace(/&gt;/g, ">");
+  text = text.replace(/&quot;/g, '"');
+  text = text.replace(/&#39;/g, "'");
+
+  // fazla boşlukları sil
+  text = text.replace(/\s+/g, " ").trim();
+
+  return text;
+}
+
+export function formatDate(date: Date): string {
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
