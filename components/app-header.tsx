@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useWallet } from "@/hooks/use-wallet";
-import { Moon, PencilLineIcon, Sun } from "lucide-react";
+import { Moon, PencilLineIcon, Sun, TrophyIcon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { ConnectWalletButton } from "./connect-wallet-button";
@@ -33,6 +33,12 @@ export function AppHeader() {
                         {
                             !isAuthenticated ? <ConnectWalletButton /> : <>
                                 <>
+                                    <Link href="/editor">
+                                        <Button className="bg-purple-500 rounded-full">
+                                            <TrophyIcon className="h-4 w-4" />
+                                            ATE Score
+                                        </Button>
+                                    </Link>
                                     <Link href="/editor">
                                         <Button className="rounded-full">
                                             <PencilLineIcon className="h-4 w-4" />
