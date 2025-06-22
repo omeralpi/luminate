@@ -1,9 +1,9 @@
 import { db } from "@/lib/db";
-import { posts } from "@/lib/db/schema";
+import { posts, userReadPosts } from "@/lib/db/schema";
 import { pinataService } from "@/lib/services/pinata";
 import { lexicalToText } from "@/lib/utils/render-lexical-content";
 import { TRPCError } from "@trpc/server";
-import { desc, eq } from "drizzle-orm";
+import { count, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 import { protectedProcedure, publicProcedure, router } from "../trpc";
 
@@ -26,9 +26,20 @@ export const postRouter = router({
             with: {
                 user: true,
             },
-        })
+        });
 
-        return post;
+        if (!post) {
+            return null;
+        }
+
+        const readCountResult = await db.select({
+            count: count()
+        }).from(userReadPosts).where(eq(userReadPosts.postId, input.id));
+
+        return {
+            ...post,
+            readCount: readCountResult[0].count,
+        };
     }),
 
     create: protectedProcedure
@@ -109,5 +120,18 @@ export const postRouter = router({
                 postId: input.postId,
                 transactionHash: input.transactionHash
             };
+        }),
+
+    markAsRead: protectedProcedure
+        .input(z.object({
+            postId: z.number(),
+        }))
+        .mutation(async ({ input, ctx }) => {
+            await db.insert(userReadPosts).values({
+                postId: input.postId,
+                userId: ctx.session.user.id,
+            }).onConflictDoNothing();
+
+            return { success: true };
         }),
 });

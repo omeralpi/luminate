@@ -1,6 +1,7 @@
 import { relations } from "drizzle-orm";
 import { boolean, integer, pgEnum, pgTable, serial, text, timestamp, varchar } from "drizzle-orm/pg-core";
 import { users } from "./user";
+import { userReadPosts } from "./user-read-post";
 
 export const ipfsStatusEnum = pgEnum('ipfs_status', ['pending', 'uploaded', 'failed']);
 
@@ -27,11 +28,12 @@ export const posts = pgTable("posts", {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 })
 
-export const postsRelations = relations(posts, ({ one }) => ({
+export const postsRelations = relations(posts, ({ one, many }) => ({
   user: one(users, {
     fields: [posts.userId],
     references: [users.id],
   }),
+  readByUsers: many(userReadPosts),
 }))
 
 export type Post = typeof posts.$inferSelect

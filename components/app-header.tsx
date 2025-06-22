@@ -33,7 +33,7 @@ export function AppHeader() {
                         {
                             !isAuthenticated ? <ConnectWalletButton /> : <>
                                 <>
-                                    <Link href="/editor">
+                                    <Link href="/ate-score">
                                         <Button className="bg-purple-500 rounded-full">
                                             <TrophyIcon className="h-4 w-4" />
                                             ATE Score

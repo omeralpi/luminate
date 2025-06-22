@@ -1,6 +1,7 @@
 import { lucia } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
+import { userAchievements } from "@/lib/db/schema/achievement";
 import { challengeStore } from "@/lib/redis";
 import crypto from 'crypto';
 import { eq } from "drizzle-orm";
@@ -55,9 +56,13 @@ export const authRouter = router({
                 [user] = await db.insert(users).values({
                     walletAddress,
                 }).returning();
+
+                await db.insert(userAchievements).values({
+                    userId: user.id,
+                    type: 'new'
+                })
             }
 
-            // Session oluştur
             const session = await lucia.createSession(user.id.toString(), {});
             const sessionCookie = lucia.createSessionCookie(session.id);
 
@@ -120,6 +125,7 @@ export const authRouter = router({
                     walletAddress: dbUser.walletAddress,
                     name: dbUser.name,
                     avatar: dbUser.avatar,
+                    location: dbUser.location,
                 } : null
             };
         }),

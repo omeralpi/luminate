@@ -12,7 +12,7 @@ import { isConnected } from "@stellar/freighter-api";
 import { ExternalLink, Loader2, ShareIcon, Wallet } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function Page() {
@@ -22,6 +22,13 @@ export default function Page() {
     const { data: session } = trpc.auth.getSession.useQuery();
     const { data: post, isFetching, refetch } = trpc.post.detail.useQuery({ id: Number(params.postId) });
     const confirmMintMutation = trpc.post.confirmNftMint.useMutation();
+    const markAsReadMutation = trpc.post.markAsRead.useMutation();
+
+    useEffect(() => {
+        if (session?.user && post) {
+            markAsReadMutation.mutate({ postId: post.id });
+        }
+    }, [session, post]);
 
     const handleMintNFT = async () => {
         if (!post?.ipfsHash) {

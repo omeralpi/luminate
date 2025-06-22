@@ -44,6 +44,7 @@ export const useWallet = () => {
                 throw new Error('Please install Freighter wallet extension');
             }
 
+
             const accessResult = await requestAccess();
             if (!accessResult || !accessResult.address) {
                 throw new Error('Wallet access denied');
@@ -51,7 +52,6 @@ export const useWallet = () => {
 
             const publicKey = accessResult.address;
 
-            // Eğer zaten bu wallet ile giriş yapılmışsa
             if (walletAddress === publicKey) {
                 setError('Already connected with this wallet');
                 return;

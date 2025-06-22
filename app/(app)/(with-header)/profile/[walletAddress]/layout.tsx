@@ -3,9 +3,12 @@
 import { EditProfileModal } from "@/components/edit-profile-modal";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { UserAvatar } from "@/components/user-avatar";
+import { achievements } from "@/config/achievements";
 import { trpc } from "@/trpc/client";
 import { Edit2Icon, MapPinIcon } from "lucide-react";
+import Image from "next/image";
 import { useParams, usePathname, useRouter } from "next/navigation";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -77,16 +80,29 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                                 {user.location || 'Unknown location'}
                             </div>
                             <div className="flex gap-2 flex-wrap">
-                                {
-                                    [
-                                        'https://media2.dev.to/dynamic/image/width=180,height=,fit=scale-down,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Fbadge%2Fbadge_image%2F373%2FPermit.io_Winner_Badge_2x.png',
-                                        'https://media2.dev.to/dynamic/image/width=180,height=,fit=scale-down,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Fbadge%2Fbadge_image%2F349%2FHacktoberfest_Challenge-03.png',
-                                        'https://media2.dev.to/dynamic/image/width=180,height=,fit=scale-down,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Fbadge%2Fbadge_image%2F161%2FCommunity_Wellness_Streak_Badge-02.png'
-                                    ]
-                                        .map((badge) => (
-                                            <img key={badge} src={badge} alt="badge" className="size-10" />
-                                        ))
-                                }
+                                {user.achievements?.map((achievement) => {
+                                    const achievementData = achievements[achievement.type];
+                                    return (
+                                        <Tooltip key={achievement.id}>
+                                            <TooltipTrigger>
+                                                <div className="flex flex-col items-center gap-2" title={achievementData.name}>
+                                                    <Image
+                                                        src={achievementData.icon}
+                                                        alt={achievementData.name}
+                                                        width={64}
+                                                        height={64}
+                                                    />
+                                                </div>
+                                            </TooltipTrigger>
+                                            <TooltipContent>
+                                                <p>{achievementData.name}</p>
+                                                <p className="text-xs text-muted-foreground">
+                                                    {new Date(achievement.createdAt).toLocaleDateString()}
+                                                </p>
+                                            </TooltipContent>
+                                        </Tooltip>
+                                    )
+                                })}
                             </div>
                         </div>
                     </div>
