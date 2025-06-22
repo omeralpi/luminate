@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { integer, pgEnum, pgTable, serial, text, timestamp, varchar } from "drizzle-orm/pg-core";
+import { boolean, integer, pgEnum, pgTable, serial, text, timestamp, varchar } from "drizzle-orm/pg-core";
 import { users } from "./user";
 
 export const ipfsStatusEnum = pgEnum('ipfs_status', ['pending', 'uploaded', 'failed']);
@@ -19,11 +19,15 @@ export const posts = pgTable("posts", {
   ipfsRetryCount: integer('ipfs_retry_count').default(0),
   ipfsUploadedAt: timestamp('ipfs_uploaded_at'),
 
+  nftMinted: boolean('nft_minted').default(false),
+  nftTransactionHash: text('nft_transaction_hash'),
+  nftMintedAt: timestamp('nft_minted_at'),
+
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 })
 
-export const postsRelations = relations(posts, ({ one }) => ({
+export const postsRelations = relations(posts, ({ one, many }) => ({
   user: one(users, {
     fields: [posts.userId],
     references: [users.id],
