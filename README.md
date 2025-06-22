@@ -11,6 +11,10 @@
 ![Luminate](https://github.com/user-attachments/assets/976effb9-1b1e-4929-bb0a-e3f1793c3281)
 </div>
 
+https://www.loom.com/share/49a3ab130c3040e3a7d9f318226320d3?sid=5cb841fe-9850-408d-a247-9915b3086728
+
+https://www.canva.com/design/DAGrAVJnGys/Pu8HI7KgKv_w9jgoZAazGw/edit
+
 <p align="center">
   <img alt="Next.js" src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white">
   <img alt="Stellar" src="https://img.shields.io/badge/Stellar-000000?style=for-the-badge&logo=stellar&logoColor=white">
