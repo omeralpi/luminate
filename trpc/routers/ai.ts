@@ -10,6 +10,7 @@ export const aiRouter = router({
         answers: z.record(z.string(), z.string()),
     })).mutation(async ({ ctx }) => {
         const { text } = await generateText({
+            // @ts-expect-error - groq is not typed
             model: groq("meta-llama/llama-4-scout-17b-16e-instruct"),
             prompt: `You are LuminATE — a Gen Z publishing platform with attitude.
 Write a short-form, second-person content piece (max 70 words) that feels like a postcard written to the user. Use a warm, sarcastic, slightly chaotic tone. Like a close friend writing after seeing the user’s vibe.

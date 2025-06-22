@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { posts } from "@/lib/db/schema";
 import { pinataService } from "@/lib/services/pinata";
 import { lexicalToText } from "@/lib/utils/render-lexical-content";
+import { TRPCError } from "@trpc/server";
 import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 import { protectedProcedure, publicProcedure, router } from "../trpc";
@@ -59,6 +60,54 @@ export const postRouter = router({
             return {
                 post,
                 ipfsUploaded: !!ipfsResult,
+            };
+        }),
+
+    confirmNftMint: protectedProcedure
+        .input(z.object({
+            postId: z.number(),
+            transactionHash: z.string(),
+            stellarAddress: z.string(),
+        }))
+        .mutation(async ({ ctx, input }) => {
+            const post = await db.query.posts.findFirst({
+                where: eq(posts.id, input.postId),
+            });
+
+            if (!post) {
+                throw new TRPCError({
+                    code: "NOT_FOUND",
+                    message: "Post not found",
+                });
+            }
+
+            if (post.userId !== ctx.session.user.id) {
+                throw new TRPCError({
+                    code: "FORBIDDEN",
+                    message: "You can only mint your own posts",
+                });
+            }
+
+            if (post.nftMinted) {
+                throw new TRPCError({
+                    code: "BAD_REQUEST",
+                    message: "Post already minted as NFT",
+                });
+            }
+
+            await db
+                .update(posts)
+                .set({
+                    nftMinted: true,
+                    nftTransactionHash: input.transactionHash,
+                    nftMintedAt: new Date(),
+                })
+                .where(eq(posts.id, input.postId));
+
+            return {
+                success: true,
+                postId: input.postId,
+                transactionHash: input.transactionHash
             };
         }),
 });

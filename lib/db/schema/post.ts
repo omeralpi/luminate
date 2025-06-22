@@ -27,7 +27,7 @@ export const posts = pgTable("posts", {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 })
 
-export const postsRelations = relations(posts, ({ one, many }) => ({
+export const postsRelations = relations(posts, ({ one }) => ({
   user: one(users, {
     fields: [posts.userId],
     references: [users.id],
