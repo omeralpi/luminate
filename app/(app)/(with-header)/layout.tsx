@@ -1,4 +1,5 @@
 import { AppHeader } from "@/components/app-header";
+import { ClientOnly } from "@/components/client-only";
 
 export default function Layout({
     children
@@ -9,7 +10,9 @@ export default function Layout({
         <div>
             <AppHeader />
             <div className="container">
-                {children}
+                <ClientOnly>
+                    {children}
+                </ClientOnly>
             </div>
         </div>
     );

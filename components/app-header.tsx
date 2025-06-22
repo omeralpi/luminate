@@ -4,17 +4,12 @@ import { Button } from "@/components/ui/button";
 import { useWallet } from "@/hooks/use-wallet";
 import { PencilLineIcon, TrophyIcon } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
 import { ConnectWalletButton } from "./connect-wallet-button";
 import { Logo } from "./logo";
 import { SearchForm } from "./search-form";
 import { UserDropdown } from "./user-dropdown";
 
 export function AppHeader() {
-    const [theme, setTheme] = useState<"light" | "dark">("light")
-
-    const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light")
-
     const { isAuthenticated, user, disconnect } = useWallet();
 
     return (
