@@ -1,6 +1,10 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
+const PROTECTED_ROUTES = [
+    '/my-posts'
+];
+
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
@@ -19,13 +23,9 @@ export async function middleware(request: NextRequest) {
         }
     }
 
-    // if (isAuthenticated && pathname === '/') {
-    //     return NextResponse.redirect(new URL('/explore', request.url));
-    // }
-
-    // if (!isAuthenticated && pathname !== '/') {
-    //     return NextResponse.redirect(new URL('/', request.url));
-    // }
+    if (!isAuthenticated && PROTECTED_ROUTES.includes(pathname)) {
+        return NextResponse.redirect(new URL('/', request.url));
+    }
 
     return NextResponse.next();
 }
