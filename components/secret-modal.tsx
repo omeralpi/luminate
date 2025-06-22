@@ -33,6 +33,7 @@ export function SecretModal({ children }: SecretModalProps) {
 }
 
 import { Input } from '@/components/ui/input';
+import { appConfig } from "@/config/app";
 import { SocialCard } from "@/lib/db/schema";
 import { trpc } from "@/trpc/client";
 import { defineStepper } from '@stepperize/react';
@@ -97,8 +98,8 @@ function SecretModalStepper() {
         incrementShareCount();
 
         const shareText = `Hey, I just discovered my secret! 🎉 Create your own secret and see what you get!`;
-        const shareUrl = `${window.location.origin}/social-card/${socialCard.id}`;
-        const imageUrl = `${window.location.origin}/api/image?content=${encodeURIComponent(socialCard.content)}`;
+        const shareUrl = `${appConfig.siteUrl}/social-card/${socialCard.id}`;
+        const imageUrl = `${appConfig.siteUrl}/api/image?content=${encodeURIComponent(socialCard.content)}`;
         const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}&image=${imageUrl}`;
 
         window.open(twitterUrl, '_blank', 'width=550,height=420');

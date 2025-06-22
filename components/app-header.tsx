@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useWallet } from "@/hooks/use-wallet";
-import { Moon, PencilLineIcon, Sun, TrophyIcon } from "lucide-react";
+import { PencilLineIcon, TrophyIcon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { ConnectWalletButton } from "./connect-wallet-button";
@@ -33,7 +33,7 @@ export function AppHeader() {
                         {
                             !isAuthenticated ? <ConnectWalletButton /> : <>
                                 <>
-                                    <Link href="/ate-score">
+                                    <Link href="/editor">
                                         <Button className="bg-purple-500 rounded-full">
                                             <TrophyIcon className="h-4 w-4" />
                                             ATE Score
@@ -49,9 +49,6 @@ export function AppHeader() {
                                 </>
                             </>
                         }
-                        <Button variant="outline" size="icon" onClick={toggleTheme} aria-label="Toggle theme" className="rounded-full">
-                            {theme === "light" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                        </Button>
                     </div>
                 </div>
             </div>

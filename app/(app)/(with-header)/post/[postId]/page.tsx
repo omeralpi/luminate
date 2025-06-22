@@ -4,13 +4,14 @@ import { CollectModal } from "@/components/collect-modal";
 import { PostUserSection } from "@/components/post-user-section";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Share } from "@/components/ui/share";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ClientStellarService } from "@/lib/client-stellar-service";
 import { stellarExplorerUrl } from "@/lib/stellar";
 import { renderLexicalContent } from "@/lib/utils/render-lexical-content";
 import { trpc } from "@/trpc/client";
 import { isConnected } from "@stellar/freighter-api";
-import { ExternalLink, Loader2, ShareIcon, Wallet } from "lucide-react";
+import { ExternalLink, Loader2, Wallet } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -166,9 +167,7 @@ export default function Page() {
                         </Button>
                     </CollectModal>
 
-                    <Button variant="outline" size="icon">
-                        <ShareIcon className="size-4" />
-                    </Button>
+                    <Share id={post.id.toString()} />
                 </div>
             </div>
             <p className="leading-relaxed text-lg text-muted-foreground" dangerouslySetInnerHTML={{ __html: contentHtml }} />

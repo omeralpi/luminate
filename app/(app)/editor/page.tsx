@@ -51,6 +51,7 @@ export default function EditorPage() {
 
     const [title, setTitle] = useState("")
     const [subTitle, setSubTitle] = useState("")
+    const [tags, setTags] = useState("")
 
     const utils = trpc.useUtils()
 
@@ -109,8 +110,10 @@ export default function EditorPage() {
                                 onClick={() => {
                                     createPost.mutate({
                                         title,
+                                        subTitle,
                                         content: editorState,
                                         cover: image ?? undefined,
+                                        tags: tags.split(",").map((tag) => tag.trim()).filter(Boolean),
                                     })
                                 }}>
                                 Publish
@@ -150,6 +153,7 @@ export default function EditorPage() {
                 }
                 <Input placeholder="Title" className="border-none h-auto outline-none font-bold !text-5xl shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 px-0" value={title} onChange={(e) => setTitle(e.target.value)} />
                 <Input placeholder="Sub title" className="border-none h-auto outline-none font-bold !text-2xl shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 px-0" value={subTitle} onChange={(e) => setSubTitle(e.target.value)} />
+                <Input placeholder="Tags (comma separated)" className="border-none h-auto outline-none !text-lg shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 px-0" value={tags} onChange={(e) => setTags(e.target.value)} />
 
                 <Suspense>
                     <Editor
