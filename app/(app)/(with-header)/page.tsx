@@ -13,7 +13,7 @@ export default function Page() {
 
     return (
         <div className="flex divide-x">
-            <div className="flex-1 py-6 pr-8 flex flex-col justify-center">
+            <div className="flex-1 py-6 pr-8 flex flex-col">
                 <Tabs defaultValue="for-you">
                     <TabsList>
                         <TabsTrigger value="for-you">For you</TabsTrigger>
