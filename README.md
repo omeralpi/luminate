@@ -4,9 +4,15 @@ LuminATE is a decentralized content publishing platform that combines the power 
 
 <img width="1488" alt="Screenshot 2025-06-22 at 10 36 49" src="https://github.com/user-attachments/assets/5d8918bd-c674-4401-b804-1f14692afd78" />
 
+![Luminate](https://github.com/user-attachments/assets/976effb9-1b1e-4929-bb0a-e3f1793c3281)
+
 ## 🏆 Why This Project?
 
-Existing content platforms are either centralized or don't fully inherit blockchain security. Our solution leverages **Stellar (Soroban)** to ensure true decentralization and user control over their content, while remaining scalable.
+LuminATE is a decentralized publishing platform built on Stellar, designed to onboard and activate Web3 users through gamified content creation.
+
+Users generate their first content by completing a short quiz ("Secret"), which produces a personalized post using AI. The platform assigns engagement-based scores (ATEs) to track activity like reading, sharing, and publishing.
+
+LuminATE replaces complex publishing flows with a fast onboarding system, and offers projects a scalable way to engage users through native, user-generated content.
 
 ## ⚙️ Tech Stack
 - 🔹 **Next.js** ⚡ (Frontend & Backend Framework)
