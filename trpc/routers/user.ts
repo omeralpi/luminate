@@ -5,7 +5,7 @@ import { userAchievements } from "@/lib/db/schema/achievement";
 import { posts } from "@/lib/db/schema/post";
 import { userReadPosts } from "@/lib/db/schema/user-read-post";
 import { TRPCError } from "@trpc/server";
-import { count, eq } from "drizzle-orm";
+import { count, eq, sql } from "drizzle-orm";
 import { z } from "zod";
 import { protectedProcedure, publicProcedure, router } from "../trpc";
 
@@ -144,5 +144,14 @@ export const userRouter = router({
         });
 
         return achievements;
+    }),
+
+    incrementShareCount: protectedProcedure.mutation(async ({ ctx }) => {
+        await db
+            .update(users)
+            .set({
+                shareCount: sql`${users.shareCount} + 1`,
+            })
+            .where(eq(users.id, ctx.session.user.id));
     }),
 });

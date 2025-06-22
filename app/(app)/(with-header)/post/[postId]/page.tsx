@@ -4,6 +4,7 @@ import { CollectModal } from "@/components/collect-modal";
 import { PostUserSection } from "@/components/post-user-section";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ClientStellarService } from "@/lib/client-stellar-service";
 import { stellarExplorerUrl } from "@/lib/stellar";
 import { renderLexicalContent } from "@/lib/utils/render-lexical-content";
@@ -82,7 +83,44 @@ export default function Page() {
     };
 
     if (isFetching) {
-        return <div>Loading...</div>
+        return (
+            <div className="py-6 space-y-6 max-w-[800px] mx-auto">
+                <Skeleton className="w-full h-64 rounded-xl" />
+                <Skeleton className="h-12 w-3/4" />
+                <div className="flex justify-between">
+                    <div className="flex items-center gap-3">
+                        <Skeleton className="h-12 w-12 rounded-full" />
+                        <div className="space-y-2">
+                            <Skeleton className="h-4 w-32" />
+                            <Skeleton className="h-3 w-24" />
+                        </div>
+                    </div>
+                    <div className="flex gap-3">
+                        <Skeleton className="h-10 w-24" />
+                        <Skeleton className="h-10 w-20" />
+                        <Skeleton className="h-10 w-10" />
+                    </div>
+                </div>
+                <div className="space-y-3">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-5/6" />
+                    <Skeleton className="h-4 w-4/5" />
+                    <Skeleton className="h-4 w-3/4" />
+                </div>
+                <Card className="bg-base-50">
+                    <CardHeader>
+                        <Skeleton className="h-6 w-24" />
+                    </CardHeader>
+                    <CardContent>
+                        <div className="space-y-2">
+                            <Skeleton className="h-12 w-full" />
+                            <Skeleton className="h-12 w-full" />
+                            <Skeleton className="h-12 w-full" />
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
+        );
     }
 
     const contentHtml = renderLexicalContent(JSON.parse(post?.content ?? ""));

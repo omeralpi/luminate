@@ -5,7 +5,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-
 /**
  * Truncates a wallet address for display purposes
  * @param address - The full wallet address
@@ -31,7 +30,6 @@ export function truncateWalletAddress(
 export function stripHtml(html: string): string {
   let text = html.replace(/<\/?[^>]+(>|$)/g, "");
 
-  // &nbsp;, &amp; gibi entity’leri temizle
   text = text.replace(/&nbsp;/g, " ");
   text = text.replace(/&amp;/g, "&");
   text = text.replace(/&lt;/g, "<");
@@ -39,7 +37,6 @@ export function stripHtml(html: string): string {
   text = text.replace(/&quot;/g, '"');
   text = text.replace(/&#39;/g, "'");
 
-  // fazla boşlukları sil
   text = text.replace(/\s+/g, " ").trim();
 
   return text;
@@ -70,3 +67,57 @@ export function getRelativeTime(date: Date | string) {
   const years = Math.floor(months / 12);
   return `${years}y ago`;
 }
+
+type LexicalNode = {
+  type?: string;
+  text?: string;
+  children?: LexicalNode[];
+};
+
+export function lexicalToText(lexicalJson: string): string {
+  try {
+    if (!lexicalJson || !lexicalJson.trim().startsWith('{"root":')) {
+      return lexicalJson;
+    }
+
+    const data: { root: LexicalNode } = JSON.parse(lexicalJson);
+    let text = '';
+
+    const traverse = (node: LexicalNode) => {
+      if (node.type === 'text' && node.text) {
+        text += node.text + ' ';
+      }
+
+      if (node.children) {
+        for (const child of node.children) {
+          traverse(child);
+        }
+      }
+    };
+
+    if (data.root) {
+      traverse(data.root);
+    }
+
+    return text.trim();
+  } catch {
+    return lexicalJson;
+  }
+}
+
+export const calculateReadingTime = (text: string) => {
+  const wordsPerMinute = 100;
+
+  const textFromLexical = lexicalToText(text);
+  const cleanText = stripHtml(textFromLexical);
+
+  const words = cleanText.trim().split(/\s+/).filter(Boolean).length;
+
+  const minutes = Math.ceil(words / wordsPerMinute);
+
+  return {
+    minutes,
+    words,
+    text: minutes <= 1 ? '1 min read' : `${minutes} min read`
+  };
+};

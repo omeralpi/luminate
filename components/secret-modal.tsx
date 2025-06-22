@@ -82,6 +82,8 @@ function SecretModalStepper() {
         },
     });
 
+    const { mutate: incrementShareCount } = trpc.user.incrementShareCount.useMutation();
+
     const handleComplete = async () => {
         const validAnswers = Object.fromEntries(
             Object.entries(answers).filter(([, value]) => value !== null)
@@ -91,6 +93,8 @@ function SecretModalStepper() {
 
     const handleTwitterShare = () => {
         if (!socialCard) return;
+
+        incrementShareCount();
 
         const shareText = `Hey, I just discovered my secret! 🎉 Create your own secret and see what you get!`;
         const shareUrl = `${window.location.origin}/social-card/${socialCard.id}`;
