@@ -25,7 +25,7 @@ export function UserDropdown({ user, onLogout }: UserDropdownProps) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-9 w-9 rounded-full">
+                <Button variant="ghost" className="border relative h-9 w-9 rounded-full">
                     <UserAvatar user={user} />
                 </Button>
             </DropdownMenuTrigger>

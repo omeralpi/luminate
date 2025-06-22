@@ -12,7 +12,7 @@ export function PostCard({ post }: { post: PostWithUser }) {
             <div className="flex gap-4">
                 <div className="space-y-2 flex-1">
                     <Link href={`/post/${post.id}`} className="text-xl font-semibold">{post.title}</Link>
-                    <div className="text-sm text-muted-foreground line-clamp-3 leading-relaxed">
+                    <div className="text-sm text-muted-foreground line-clamp-3 leading-relaxed mt-3">
                         {lexicalToText(JSON.parse(post.content ?? ""))}
                     </div>
                 </div>
@@ -29,15 +29,15 @@ export function PostCard({ post }: { post: PostWithUser }) {
                 </Link>
                 <div className="flex items-center gap-4">
                     <div className="flex items-center gap-2">
-                        <HeartIcon className="size-4" /> 33
+                        <HeartIcon className="size-4" /> 0
                     </div>
                     <div className="size-[4px] rounded-full bg-black/25 flex"></div>
                     <div className="flex items-center gap-2"> <MessageCircleIcon className="size-4" />
-                        33
+                        0
                     </div>
                     <div className="size-[4px] rounded-full bg-black/25 flex"></div>
                     <div className="flex items-center gap-2">
-                        <BookmarkIcon className="size-4" /> 33
+                        <BookmarkIcon className="size-4" /> 0
                     </div>
                 </div>
             </div>

@@ -134,15 +134,14 @@ The contract includes a comprehensive test suite to ensure its functionality and
 *   `test_get_total_posts`: Ensures the total post count is accurate.
 *   `test_multiple_posts_and_collections`: Tests scenarios with multiple posts and collections.
 
-📋 TODO List
-
-### Core Features
+### 📋 TODO List
 *   [x] Content categories & tags
 *   [x] On-chain content verification
 *   [x] AI-powered secret generation
 *   [ ] Notification system
 *   [ ] Bookmarks system
 *   [ ] Subscribe user
+*   [ ] More more responsive
 
 📜 License
 This project is licensed under the MIT License.
