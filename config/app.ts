@@ -1,7 +1,7 @@
 export const appConfig = {
     siteName: "LuminATE",
     siteDescription: "LuminATE is a platform for creating and sharing social cards",
-    siteUrl: "https://luminate.com",
+    siteUrl: "https://pera-luminate.vercel.app",
     siteImage: "/og-image.jpg",
     siteTwitter: "@luminate",
     siteTwitterCard: "summary_large_image",
