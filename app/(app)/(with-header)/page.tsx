@@ -7,7 +7,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { trpc } from "@/trpc/client";
 import { ArrowRightIcon } from "lucide-react";
-import Link from "next/link";
 
 export default function Page() {
     const { data: posts = [], isFetching } = trpc.post.list.useQuery();
@@ -26,9 +25,7 @@ export default function Page() {
                         <PostCardSkeleton key={index} />
                     )) : (
                         posts.map((post) => (
-                            <Link href={`/post/${post.id}`} key={post.id}>
-                                <PostCard post={post} />
-                            </Link>
+                            <PostCard key={post.id} post={post} />
                         ))
                     )}
                 </div>
@@ -41,7 +38,7 @@ export default function Page() {
                         </div>
                         <div>
                             <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                                I'll tell you a secret...
+                                I&apos;ll tell you a secret...
                             </h3>
                             <p className="text-sm text-gray-600 mb-4">
                                 Answer 3 questions and get a special card

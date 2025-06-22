@@ -1,7 +1,6 @@
 'use client';
 
 import { CollectModal } from "@/components/collect-modal";
-import { CollectorsList } from "@/components/collectors-list";
 import { PostUserSection } from "@/components/post-user-section";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -90,7 +89,7 @@ export default function Page() {
 
     return (
         <div className="py-6 space-y-6 max-w-[800px] mx-auto">
-            <img className="mx-auto w-full rounded-xl" src={post?.cover} alt={post?.title} />
+            <img className="mx-auto w-full rounded-xl" src={post?.cover || ""} alt={post?.title || ""} />
             <h1 className="text-4xl font-bold">{post?.title}</h1>
             <div className="flex justify-between">
                 <PostUserSection post={post} />
@@ -158,7 +157,6 @@ export default function Page() {
                     </div>
                 </CardContent>
             </Card>
-            <CollectorsList postId={post.id} />
         </div >
     )
 }

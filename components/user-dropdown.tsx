@@ -22,10 +22,6 @@ interface UserDropdownProps {
 }
 
 export function UserDropdown({ user, onLogout }: UserDropdownProps) {
-    const initials = user.name
-        ? user.name.split(' ').map(n => n[0]).join('').toUpperCase()
-        : user.walletAddress.slice(0, 2).toUpperCase()
-
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -37,7 +33,7 @@ export function UserDropdown({ user, onLogout }: UserDropdownProps) {
                 <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-2">
                         <p className="text-sm font-medium leading-none">
-                            {user.name || "Anonymous User"}
+                            {user.name}
                         </p>
                         <p className="text-xs leading-none text-muted-foreground">
                             {truncateWalletAddress(user.walletAddress)}

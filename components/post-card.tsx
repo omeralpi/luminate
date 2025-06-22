@@ -2,6 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { PostWithUser } from "@/lib/db/schema/post";
 import { lexicalToText } from "@/lib/utils/render-lexical-content";
 import { BookmarkIcon, HeartIcon, MessageCircleIcon } from "lucide-react";
+import Link from "next/link";
 import { UserAvatar } from "./user-avatar";
 
 export function PostCard({ post }: { post: PostWithUser }) {
@@ -10,20 +11,22 @@ export function PostCard({ post }: { post: PostWithUser }) {
             <div className="text-sm text-muted-foreground">1 min read</div>
             <div className="flex gap-4">
                 <div className="space-y-2 flex-1">
-                    <div className="text-xl font-semibold">{post.title}</div>
+                    <Link href={`/post/${post.id}`} className="text-xl font-semibold">{post.title}</Link>
                     <div className="text-sm text-muted-foreground line-clamp-3 leading-relaxed">
                         {lexicalToText(JSON.parse(post.content ?? ""))}
                     </div>
                 </div>
-                <img src={post.cover || ""} alt={post.title} className="h-[108px] w-[180px] object-cover rounded-xl" />
+                <Link href={`/post/${post.id}`}>
+                    <img src={post.cover || ""} alt={post.title} className="h-[108px] w-[180px] object-cover rounded-xl" />
+                </Link>
             </div>
             <div className="flex text-sm text-muted-foreground gap-8 items-center">
-                <div className="flex items-center gap-2">
+                <Link href={`/profile/${post.user.walletAddress}`} className="flex items-center gap-2">
                     <UserAvatar className="w-7 h-7" user={post.user} />
                     <div>
-                        {post.user.name ?? "Anonymous User"}
+                        {post.user.name}
                     </div>
-                </div>
+                </Link>
                 <div className="flex items-center gap-4">
                     <div className="flex items-center gap-2">
                         <HeartIcon className="size-4" /> 33

@@ -118,6 +118,8 @@ export const authRouter = router({
                 user: dbUser ? {
                     id: dbUser.id,
                     walletAddress: dbUser.walletAddress,
+                    name: dbUser.name,
+                    avatar: dbUser.avatar,
                 } : null
             };
         }),
