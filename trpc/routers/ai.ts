@@ -3,10 +3,10 @@ import { socialCards } from "@/lib/db/schema";
 import { groq } from "@ai-sdk/groq";
 import { generateText } from "ai";
 import { z } from "zod";
-import { protectedProcedure, router } from "../trpc";
+import { publicProcedure, router } from "../trpc";
 
 export const aiRouter = router({
-    generateSecret: protectedProcedure.input(z.object({
+    generateSecret: publicProcedure.input(z.object({
         answers: z.record(z.string(), z.string()),
     })).mutation(async ({ ctx }) => {
         const { text } = await generateText({
@@ -26,7 +26,7 @@ Always randomize the answers`,
 
         const [socialCard] = await db.insert(socialCards).values({
             content: text,
-            userId: ctx.session.user.id,
+            userId: ctx.session?.user.id ?? null,
         }).returning();
 
         return socialCard;

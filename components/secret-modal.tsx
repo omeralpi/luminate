@@ -36,7 +36,7 @@ import { Input } from '@/components/ui/input';
 import { SocialCard } from "@/lib/db/schema";
 import { trpc } from "@/trpc/client";
 import { defineStepper } from '@stepperize/react';
-import { Twitter } from "lucide-react";
+import { Loader2, Twitter } from "lucide-react";
 
 const { useStepper, utils } = defineStepper(
     {
@@ -69,6 +69,7 @@ function SecretModalStepper() {
     const stepper = useStepper();
     const [answers, setAnswers] = useState<Record<string, string | null>>({});
     const [socialCard, setSocialCard] = useState<SocialCard | null>(null);
+    const [isImageLoading, setIsImageLoading] = useState(false);
 
     const handleAnswer = (id: string, value: string) => {
         setAnswers((prev) => ({ ...prev, [id]: value }));
@@ -77,6 +78,7 @@ function SecretModalStepper() {
     const { mutate: generateSecret, isPending } = trpc.ai.generateSecret.useMutation({
         onSuccess: (data) => {
             setSocialCard(data);
+            setIsImageLoading(true);
         },
     });
 
@@ -103,11 +105,18 @@ function SecretModalStepper() {
     if (socialCard) {
         return (
             <div className="space-y-4">
-                <div className="relative">
+                <div className="relative aspect-video w-full overflow-hidden rounded-lg">
+                    {isImageLoading && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-secondary">
+                            <Loader2 className="h-12 w-12 animate-spin text-primary" />
+                        </div>
+                    )}
                     <img
                         src={`/api/image?content=${encodeURIComponent(socialCard.content)}`}
                         alt="secret"
-                        className="w-full rounded-lg"
+                        className="h-full w-full object-cover transition-opacity duration-300"
+                        onLoad={() => setIsImageLoading(false)}
+                        style={{ opacity: isImageLoading ? 0 : 1 }}
                     />
                 </div>
                 <div className="flex justify-center">
@@ -174,13 +183,21 @@ function SecretModalStepper() {
                         >
                             Back
                         </Button>
-                        <Button onClick={stepper.next}>
+                        <Button
+                            onClick={stepper.next}
+                            disabled={!answers[stepper.current.id]}
+                        >
                             {stepper.isLast ? 'Complete' : 'Next'}
                         </Button>
                     </div>
                 ) : (
                     <div className="flex justify-end gap-4">
-                        <Button onClick={handleComplete} disabled={isPending}>
+                        <Button
+                            onClick={handleComplete}
+                            disabled={
+                                isPending || !answers[stepper.current.id]
+                            }
+                        >
                             {isPending ? 'Generating...' : 'Complete'}
                         </Button>
                     </div>
