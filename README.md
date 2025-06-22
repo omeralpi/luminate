@@ -1,155 +1,161 @@
-# LuminATE
-
-LuminATE is a decentralized content publishing platform that combines the power of a modern web stack with the security and transparency of the Stellar blockchain.
-
-<img width="1488" alt="Screenshot 2025-06-22 at 10 36 49" src="https://github.com/user-attachments/assets/5d8918bd-c674-4401-b804-1f14692afd78" />
+<div align="center">
+  <br />
+  <h1 align="center">🌟 LuminATE 🌟</h1>
+  <p align="center">
+    <b>Where Your Content is Truly Yours.</b>
+    <br />
+    A decentralized content platform on the Stellar network, empowering creators with on-chain ownership and an AI-driven economy.
+  </p>
+ <img width="1488" alt="Screenshot 2025-06-22 at 10 36 49" src="https://github.com/user-attachments/assets/5d8918bd-c674-4401-b804-1f14692afd78" />
 
 ![Luminate](https://github.com/user-attachments/assets/976effb9-1b1e-4929-bb0a-e3f1793c3281)
+</div>
 
-## 🏆 Why This Project?
+<p align="center">
+  <img alt="Next.js" src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white">
+  <img alt="Stellar" src="https://img.shields.io/badge/Stellar-000000?style=for-the-badge&logo=stellar&logoColor=white">
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
+  <img alt="Vercel" src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white">
+  <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white">
+</p>
 
-LuminATE is a decentralized publishing platform built on Stellar, designed to onboard and activate Web3 users through gamified content creation.
+---
+
+## 🚀 The Mission
+
+LuminATE is a decentralized publishing platform built on Stellar, designed to onboard and activate Web3 users through gamified content creation.Add commentMore actions
 
 Users generate their first content by completing a short quiz ("Secret"), which produces a personalized post using AI. The platform assigns engagement-based scores (ATEs) to track activity like reading, sharing, and publishing.
 
 LuminATE replaces complex publishing flows with a fast onboarding system, and offers projects a scalable way to engage users through native, user-generated content.
 
-## ⚙️ Tech Stack
-- 🔹 **Next.js** ⚡ (Frontend & Backend Framework)
-- 🔹 **Stellar (Soroban)** ⛓️ (Blockchain for Smart Contracts & NFTs)
-- 🔹 **Pinata (IPFS)** 🧊 (Decentralized Content Storage)
-- 🔹 **PostgreSQL** 🗄️ (Database)
-- 🔹 **Drizzle ORM** 🎯 (TypeScript ORM)
-- 🔹 **tRPC** 📞 (End-to-end Typesafe APIs)
-- 🔹 **Lucia** 🔑 (Authentication)
-- 🔹 **TailwindCSS** 🎨 (Styling)
-- 🔹 **Shadcn/UI** 🧩 (UI Components)
-- 🔹 **Groq** 🧠 (Fast AI Inference)
-- 🔹 **Vercel** 🚀 (Hosting & OG Image Generation)
+## ✨ Core Features
 
-## 🚀 Getting Started
+-   🌐 **Decentralized & On-Chain:** All content metadata is stored on the Stellar blockchain via Soroban smart contracts. The content itself is pinned to IPFS, ensuring it's censorship-resistant and permanent.
+-   🖼️ **Content as Collectible NFTs:** Creators can mint their posts as collectible NFTs on the Stellar network. This empowers them with true ownership and opens up new, direct monetization channels with their community.
+-   💸 **On-Chain Economy & Scoring:** LuminATE introduces a transparent, on-chain scoring system to reward user contributions. Every interaction has value:
+    -   **Publishing a post:** `+2 LUMIN`
+    -   **Sharing content:** `+5 LUMIN`
+    -   **Referring a new user:** `+10 LUMIN`
+    -   **Reading content:** `+0.1 LUMIN`
+-   🤖 **AI-Powered Secrets:** Use the integrated **Groq** AI to generate unique, unlockable "secret" content for your posts, adding an element of surprise and value for your audience.
+-   🔐 **End-to-End Type-Safety:** Built with a modern, robust stack including tRPC, Drizzle ORM, and TypeScript for a highly maintainable and error-free codebase.
+-   🔑 **Secure Authentication:** User accounts are managed through Lucia, providing a secure and reliable authentication system.
+
+## 🏗️ Architecture
+
+Here's a look at how the different components of LuminATE work together:
+
+## 🛠️ Tech Stack
+
+<img width="1116" alt="Screenshot 2025-06-22 at 13 05 53" src="https://github.com/user-attachments/assets/1cf1f560-3914-4cc1-8919-d5ebafd5e6ef" />
+
+-   **Framework:** Next.js (App Router)
+-   **Blockchain:** Stellar (Soroban)
+-   **Decentralized Storage:** IPFS (via Pinata)
+-   **Database:** PostgreSQL
+-   **ORM:** Drizzle ORM
+-   **API:** tRPC
+-   **Authentication:** Lucia
+-   **Styling:** TailwindCSS
+-   **UI Components:** Shadcn/UI
+-   **AI:** Groq
+-   **Deployment:** Vercel
+
+## ⚙️ Getting Started
+
+Follow these steps to get a local instance of LuminATE up and running.
 
 ### Prerequisites
-*   Node.js 18+
-*   PNPM package manager
-*   Docker (for local PostgreSQL instance)
-*   [Freighter Wallet](https://www.freighter.app/) browser extension (for interacting with Stellar)
-*   [Rust](https://www.rust-lang.org/tools/install) toolchain (including `cargo`)
 
-### Installation
+-   Node.js 20+
+-   PNPM (`npm install -g pnpm`)
+-   Docker
+-   [Freighter Wallet](https://www.freighter.app/) Browser Extension
+-   [Rust Toolchain](https://www.rust-lang.org/tools/install) (for smart contract development)
 
-1.  **Clone the repository:**
-    ```bash
-    git clone <repository-url>
-    cd luminate
-    ```
+### 1. Clone & Install
 
-2.  **Set up environment variables:**
+```bash
+git clone <repository-url>
+cd luminate
+pnpm install
+```
 
-    Create a `.env` file in the root of the project and add the following variables.
-    ```env
-    # PostgreSQL connection URL
-    DATABASE_URL="postgresql://user:password@localhost:5432/db_name"
+### 2. Set Up Environment
 
-    # Stellar Network Configuration
-    NEXT_PUBLIC_STELLAR_NETWORK="testnet"
-    NEXT_PUBLIC_STELLAR_RPC_URL="https://soroban-testnet.stellar.org"
-    # Find the contract ID after deploying your Soroban contract
-    NEXT_PUBLIC_STELLAR_CONTRACT_ID="<YOUR_CONTRACT_ID>"
+Create a `.env` file in the root directory by copying the example:
 
-    # GROQ AI Configuration
-    GROQ_API_KEY="<YOUR_GROQ_API_KEY>"
+```bash
+cp .env.example .env
+```
 
-    # Application URL
-    NEXT_PUBLIC_APP_URL="http://localhost:3000"
-    ```
+Now, fill in the necessary variables in your new `.env` file:
 
-3.  **Start the database:**
-    ```bash
-    docker-compose up -d
-    ```
+```env
+# PostgreSQL connection URL
+DATABASE_URL="postgresql://user:password@localhost:5432/db_name"
 
-4.  **Install dependencies:**
-    ```bash
-    pnpm install
-    ```
+# Stellar Network Configuration
+NEXT_PUBLIC_STELLAR_NETWORK="testnet"
+NEXT_PUBLIC_STELLAR_RPC_URL="https://soroban-testnet.stellar.org"
+# Find the contract ID after deploying your Soroban contract
+NEXT_PUBLIC_STELLAR_CONTRACT_ID="<YOUR_CONTRACT_ID>"
 
-5.  **Run database migrations:**
-    ```bash
-    pnpm db:push
-    ```
+# GROQ AI Configuration
+GROQ_API_KEY="<YOUR_GROQ_API_KEY>"
 
-6.  **Start the development server:**
-    ```bash
-    pnpm dev
-    ```
+# Application URL
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+```
 
-The application should now be running on [http://localhost:3000](http://localhost:3000).
+### 3. Start Services & Run
 
-### Smart Contracts (Soroban)
+```bash
+# Start the PostgreSQL database in Docker
+docker-compose up -d
 
-The Soroban smart contracts for LuminATE are located in the `contracts` directory.
+# Apply database migrations
+pnpm db:push
 
-#### Running Tests & Building
+# Start the development server
+pnpm dev
+```
 
-A script is provided to simplify testing and building the contract.
+Your application should now be live at `http://localhost:3000`!
 
-1.  **Navigate to the contracts directory:**
-    ```bash
-    cd contracts
-    ```
+## ⛓️ Smart Contract Development
 
-2.  **Make the test runner executable (if you haven't already):**
-    ```bash
-    chmod +x scripts/test-runner.sh
-    ```
+The Soroban smart contracts are the backbone of LuminATE, located in the `/contracts` directory.
 
-3.  **Run the script:**
-    ```bash
-    ./scripts/test-runner.sh
-    ```
+### Build & Test
 
-This script will run all contract tests and then build the WASM file for deployment.
+We've included a convenient script to streamline the development process.
 
-#### Manual Commands
+1.  **Navigate to the contracts directory:** `cd contracts`
+2.  **Make the script executable:** `chmod +x scripts/test-runner.sh`
+3.  **Run the script:** `./scripts/test-runner.sh`
 
-You can also run tests or build the contract manually using `cargo` from within the `contracts` directory.
+This will run all contract tests and build the `.wasm` file for deployment. The compiled contract can be found at `target/wasm32-unknown-unknown/release/post_contract.wasm`.
 
-*   **Run all tests:**
-    ```bash
-    cargo test
-    ```
+## 🗺️ Roadmap
 
-*   **Build the contract:**
-    ```bash
-    cargo build --target wasm32-unknown-unknown --release
-    ```
+We have big plans for LuminATE! Here's what we're working on next:
 
-The compiled contract will be located at `target/wasm32-unknown-unknown/release/post_contract.wasm`.
+-   [ ] **Notification System:** Real-time alerts for interactions.
+-   [ ] **Bookmarks:** Save your favorite content for later.
+-   [ ] **Enhanced Mobile Responsiveness:** A flawless experience on any device.
+-   [ ] **Advanced Analytics:** In-depth insights for creators.
 
-#### Available Tests
+## 🤝 Contributing
 
-The contract includes a comprehensive test suite to ensure its functionality and security. Here are some of the key tests:
+We welcome contributions from the community! If you'd like to help improve LuminATE, please feel free to fork the repository, make your changes, and submit a pull request.
 
-*   `test_initialize`: Checks if the contract initializes correctly.
-*   `test_user_creates_post`: Verifies that a user can create a new post.
-*   `test_author_cannot_uncollect_own_post`: Ensures an author cannot uncollect their own post.
-*   `test_cannot_collect_twice`: Prevents a user from collecting the same post more than once.
-*   `test_uncollect_functionality`: Tests the uncollecting functionality.
-*   `test_max_supply_limit`: Checks the maximum supply limit for collectibles.
-*   `test_nft_conversion_optional`: Verifies the optional NFT conversion logic.
-*   `test_unlimited_collecting`: Tests the functionality for posts with unlimited collects.
-*   `test_get_total_posts`: Ensures the total post count is accurate.
-*   `test_multiple_posts_and_collections`: Tests scenarios with multiple posts and collections.
+## 📜 License
 
-### 📋 TODO List
-*   [x] Content categories & tags
-*   [x] On-chain content verification
-*   [x] AI-powered secret generation
-*   [ ] Notification system
-*   [ ] Bookmarks system
-*   [ ] Subscribe user
-*   [ ] More more responsive
+This project is licensed under the **MIT License**. See the `LICENSE` file for more details.
 
-📜 License
-This project is licensed under the MIT License.
+---
+<p align="center">
+  Built with ❤️ for the future of decentralized content.
+</p>
