@@ -1,36 +1,148 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LuminATE
 
-## Getting Started
+LuminATE is a decentralized social platform that combines the power of a modern web stack with the security and transparency of the Stellar blockchain.
 
-First, run the development server:
+## 🏆 Why This Project?
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Existing social networks are either centralized (X) or don't fully inherit blockchain security (Farcaster). Our solution leverages **Stellar (Soroban)** to ensure true decentralization and user control over their content and social graph, while remaining scalable.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ⚙️ Tech Stack
+- 🔹 **Next.js** ⚡ (Frontend & Backend Framework)
+- 🔹 **Stellar (Soroban)** ⛓️ (Blockchain for Smart Contracts & NFTs)
+- 🔹 **Pinata (IPFS)** 🧊 (Decentralized Content Storage)
+- 🔹 **PostgreSQL** 🗄️ (Database)
+- 🔹 **Drizzle ORM** 🎯 (TypeScript ORM)
+- 🔹 **tRPC** 📞 (End-to-end Typesafe APIs)
+- 🔹 **Lucia** 🔑 (Authentication)
+- 🔹 **TailwindCSS** 🎨 (Styling)
+- 🔹 **Shadcn/UI** 🧩 (UI Components)
+- 🔹 **Groq** 🧠 (Fast AI Inference)
+- 🔹 **Vercel** 🚀 (Hosting & OG Image Generation)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🚀 Getting Started
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Prerequisites
+*   Node.js 18+
+*   PNPM package manager
+*   Docker (for local PostgreSQL instance)
+*   [Freighter Wallet](https://www.freighter.app/) browser extension (for interacting with Stellar)
+*   [Rust](https://www.rust-lang.org/tools/install) toolchain (including `cargo`)
 
-## Learn More
+### Installation
 
-To learn more about Next.js, take a look at the following resources:
+1.  **Clone the repository:**
+    ```bash
+    git clone <repository-url>
+    cd luminate
+    ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2.  **Set up environment variables:**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+    Create a `.env` file in the root of the project and add the following variables.
+    ```env
+    # PostgreSQL connection URL
+    DATABASE_URL="postgresql://user:password@localhost:5432/db_name"
 
-## Deploy on Vercel
+    # Stellar Network Configuration
+    NEXT_PUBLIC_STELLAR_NETWORK="testnet"
+    NEXT_PUBLIC_STELLAR_RPC_URL="https://soroban-testnet.stellar.org"
+    # Find the contract ID after deploying your Soroban contract
+    NEXT_PUBLIC_STELLAR_CONTRACT_ID="<YOUR_CONTRACT_ID>"
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+    # GROQ AI Configuration
+    GROQ_API_KEY="<YOUR_GROQ_API_KEY>"
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+    # Application URL
+    NEXT_PUBLIC_APP_URL="http://localhost:3000"
+    ```
+
+3.  **Start the database:**
+    ```bash
+    docker-compose up -d
+    ```
+
+4.  **Install dependencies:**
+    ```bash
+    pnpm install
+    ```
+
+5.  **Run database migrations:**
+    ```bash
+    pnpm db:push
+    ```
+
+6.  **Start the development server:**
+    ```bash
+    pnpm dev
+    ```
+
+The application should now be running on [http://localhost:3000](http://localhost:3000).
+
+### Smart Contracts (Soroban)
+
+The Soroban smart contracts for LuminATE are located in the `contracts` directory.
+
+#### Running Tests & Building
+
+A script is provided to simplify testing and building the contract.
+
+1.  **Navigate to the contracts directory:**
+    ```bash
+    cd contracts
+    ```
+
+2.  **Make the test runner executable (if you haven't already):**
+    ```bash
+    chmod +x scripts/test-runner.sh
+    ```
+
+3.  **Run the script:**
+    ```bash
+    ./scripts/test-runner.sh
+    ```
+
+This script will run all contract tests and then build the WASM file for deployment.
+
+#### Manual Commands
+
+You can also run tests or build the contract manually using `cargo` from within the `contracts` directory.
+
+*   **Run all tests:**
+    ```bash
+    cargo test
+    ```
+
+*   **Build the contract:**
+    ```bash
+    cargo build --target wasm32-unknown-unknown --release
+    ```
+
+The compiled contract will be located at `target/wasm32-unknown-unknown/release/post_contract.wasm`.
+
+#### Available Tests
+
+The contract includes a comprehensive test suite to ensure its functionality and security. Here are some of the key tests:
+
+*   `test_initialize`: Checks if the contract initializes correctly.
+*   `test_user_creates_post`: Verifies that a user can create a new post.
+*   `test_author_cannot_uncollect_own_post`: Ensures an author cannot uncollect their own post.
+*   `test_cannot_collect_twice`: Prevents a user from collecting the same post more than once.
+*   `test_uncollect_functionality`: Tests the uncollecting functionality.
+*   `test_max_supply_limit`: Checks the maximum supply limit for collectibles.
+*   `test_nft_conversion_optional`: Verifies the optional NFT conversion logic.
+*   `test_unlimited_collecting`: Tests the functionality for posts with unlimited collects.
+*   `test_get_total_posts`: Ensures the total post count is accurate.
+*   `test_multiple_posts_and_collections`: Tests scenarios with multiple posts and collections.
+
+📋 TODO List
+
+### Core Features
+*   [x] Content categories & tags
+*   [x] On-chain content verification
+*   [x] AI-powered secret generation
+*   [ ] Notification system
+*   [ ] Bookmarks system
+*   [ ] Subscribe user
+
+📜 License
+This project is licensed under the MIT License.
