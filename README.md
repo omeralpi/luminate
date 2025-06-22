@@ -9,12 +9,6 @@
  <img width="1488" alt="Screenshot 2025-06-22 at 10 36 49" src="https://github.com/user-attachments/assets/5d8918bd-c674-4401-b804-1f14692afd78" />
 
 ![Luminate](https://github.com/user-attachments/assets/976effb9-1b1e-4929-bb0a-e3f1793c3281)
-
-https://www.canva.com/design/DAGrAVJnGys/Pu8HI7KgKv_w9jgoZAazGw
-
-https://www.loom.com/share/49a3ab130c3040e3a7d9f318226320d3?sid=5cb841fe-9850-408d-a247-9915b3086728
-
-
 </div>
 
 <p align="center">

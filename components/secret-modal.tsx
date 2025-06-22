@@ -33,11 +33,10 @@ export function SecretModal({ children }: SecretModalProps) {
 }
 
 import { Input } from '@/components/ui/input';
-import { appConfig } from "@/config/app";
 import { SocialCard } from "@/lib/db/schema";
 import { trpc } from "@/trpc/client";
 import { defineStepper } from '@stepperize/react';
-import { Copy, Loader2, Twitter } from "lucide-react";
+import { Loader2, Twitter } from "lucide-react";
 
 const { useStepper, utils } = defineStepper(
     {
@@ -71,7 +70,6 @@ function SecretModalStepper() {
     const [answers, setAnswers] = useState<Record<string, string | null>>({});
     const [socialCard, setSocialCard] = useState<SocialCard | null>(null);
     const [isImageLoading, setIsImageLoading] = useState(false);
-    const [isCopied, setIsCopied] = useState(false);
 
     const handleAnswer = (id: string, value: string) => {
         setAnswers((prev) => ({ ...prev, [id]: value }));
@@ -99,27 +97,11 @@ function SecretModalStepper() {
         incrementShareCount();
 
         const shareText = `Hey, I just discovered my secret! 🎉 Create your own secret and see what you get!`;
-        const shareUrl = `${appConfig.siteUrl}/social-card/${socialCard.id}`;
-        const imageUrl = `${appConfig.siteUrl}/api/image?content=${encodeURIComponent(socialCard.content)}`;
+        const shareUrl = `${window.location.origin}/social-card/${socialCard.id}`;
+        const imageUrl = `${window.location.origin}/api/image?content=${encodeURIComponent(socialCard.content)}`;
         const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}&image=${imageUrl}`;
 
         window.open(twitterUrl, '_blank', 'width=550,height=420');
-    };
-
-    const handleCopy = async () => {
-        if (!socialCard) return;
-
-        const imageUrl = `/api/image?content=${encodeURIComponent(socialCard.content)}`;
-        try {
-            const response = await fetch(imageUrl);
-            const blob = await response.blob();
-            await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
-
-            setIsCopied(true);
-            setTimeout(() => setIsCopied(false), 2000);
-        } catch (error) {
-            console.error('Failed to copy image:', error);
-        }
     };
 
     const currentIndex = utils.getIndex(stepper.current.id);
@@ -141,7 +123,7 @@ function SecretModalStepper() {
                         style={{ opacity: isImageLoading ? 0 : 1 }}
                     />
                 </div>
-                <div className="flex justify-center gap-4">
+                <div className="flex justify-center">
                     <Button
                         onClick={handleTwitterShare}
                         className="flex items-center gap-2"
@@ -149,15 +131,6 @@ function SecretModalStepper() {
                     >
                         <Twitter className="w-4 h-4" />
                         Share on Twitter
-                    </Button>
-                    <Button
-                        onClick={handleCopy}
-                        className="flex items-center gap-2"
-                        variant="outline"
-                        disabled={isCopied}
-                    >
-                        <Copy className="w-4 h-4" />
-                        {isCopied ? 'Copied!' : 'Copy Image'}
                     </Button>
                 </div>
             </div>

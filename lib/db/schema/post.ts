@@ -1,6 +1,5 @@
 import { relations } from "drizzle-orm";
 import { boolean, integer, pgEnum, pgTable, serial, text, timestamp, varchar } from "drizzle-orm/pg-core";
-import { postTags } from "./post-tag";
 import { users } from "./user";
 import { userReadPosts } from "./user-read-post";
 
@@ -34,8 +33,7 @@ export const postsRelations = relations(posts, ({ one, many }) => ({
     fields: [posts.userId],
     references: [users.id],
   }),
-  userReadPosts: many(userReadPosts),
-  postTags: many(postTags),
+  readByUsers: many(userReadPosts),
 }))
 
 export type Post = typeof posts.$inferSelect

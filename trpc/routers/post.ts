@@ -1,63 +1,22 @@
 import { db } from "@/lib/db";
-import { postTags, posts, tags, userReadPosts } from "@/lib/db/schema";
+import { posts, userReadPosts } from "@/lib/db/schema";
+import { pinataService } from "@/lib/services/pinata";
+import { lexicalToText } from "@/lib/utils/render-lexical-content";
 import { TRPCError } from "@trpc/server";
-import { and, count, desc, eq, ilike, inArray, or } from "drizzle-orm";
+import { count, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 import { protectedProcedure, publicProcedure, router } from "../trpc";
 
 export const postRouter = router({
-    list: publicProcedure
-        .input(
-            z.object({
-                cursor: z.number().nullish(),
-                limit: z.number().min(1).max(100).default(10),
-                tag: z.string().optional(),
-                search: z.string().optional(),
-            })
-        )
-        .query(async ({ input }) => {
-            const { cursor, limit, tag, search } = input;
-
-            const postList = await db.query.posts.findMany({
-                limit,
-                offset: cursor ?? 0,
-                orderBy: [desc(posts.createdAt)],
-                where: (posts, { exists }) => {
-                    const conditions = [];
-
-                    if (tag) {
-                        conditions.push(exists(db.select().from(postTags)
-                            .leftJoin(tags, eq(postTags.tagId, tags.id))
-                            .where(and(eq(postTags.postId, posts.id), ilike(tags.name, `%${tag}%`))))
-                        );
-                    }
-
-                    if (search) {
-                        conditions.push(
-                            or(
-                                ilike(posts.title, `%${search}%`),
-                                ilike(posts.subTitle, `%${search}%`)
-                            )!
-                        );
-                    }
-
-                    if (conditions.length > 0) {
-                        return and(...conditions);
-                    }
-
-                    return undefined;
-                },
-                with: {
-                    user: true,
-                    postTags: {
-                        with: {
-                            tag: true,
-                        }
-                    }
-                },
-            });
-            return postList;
-        }),
+    list: publicProcedure.query(async () => {
+        return db.query.posts.findMany({
+            with: {
+                user: true,
+            },
+            orderBy: desc(posts.createdAt),
+            limit: 10,
+        })
+    }),
 
     detail: publicProcedure.input(z.object({
         id: z.number(),
@@ -84,59 +43,35 @@ export const postRouter = router({
     }),
 
     create: protectedProcedure
-        .input(
-            z.object({
-                title: z.string(),
-                subTitle: z.string().optional(),
-                content: z.any(),
-                cover: z.string().optional(),
-                tags: z.array(z.string()).optional(),
-            })
-        )
-        .mutation(async ({ ctx, input }) => {
-            const userId = ctx.session.user.id;
+        .input(z.object({
+            title: z.string(),
+            subTitle: z.string().optional(),
+            content: z.any(),
+            cover: z.string().optional(),
+        }))
+        .mutation(async ({ input, ctx }) => {
+            const ipfsResult = await pinataService.uploadJSON({
+                title: input.title,
+                content: lexicalToText(input.content),
+                author: ctx.session.user.id,
+                tags: [],
+                timestamp: new Date().toISOString(),
+            });
 
-            const newPostQueryResult = await db
-                .insert(posts)
-                .values({
-                    title: input.title,
-                    subTitle: input.subTitle,
-                    content: input.content,
-                    userId: userId,
-                    cover: input.cover,
-                })
-                .returning({ id: posts.id });
+            const post = await db.insert(posts).values({
+                title: input.title,
+                subTitle: input.subTitle,
+                content: input.content,
+                cover: input.cover,
+                userId: ctx.session.user.id,
+                ipfsHash: ipfsResult.ipfsHash,
+                gatewayUrl: ipfsResult.gatewayUrl,
+            });
 
-            const postId = newPostQueryResult[0]?.id;
-
-            if (!postId) {
-                throw new TRPCError({
-                    code: "INTERNAL_SERVER_ERROR",
-                    message: "Failed to create post",
-                });
-            }
-
-            if (input.tags && input.tags.length > 0) {
-                const lowercasedTags = input.tags.map(t => t.toLowerCase().trim()).filter(t => t.length > 0);
-                if (lowercasedTags.length > 0) {
-                    const existingTags = await db.select().from(tags).where(inArray(tags.name, lowercasedTags));
-                    const existingTagNames = existingTags.map(t => t.name);
-                    const newTagNames = lowercasedTags.filter(t => !existingTagNames.includes(t));
-
-                    let newTags: { id: number; name: string; createdAt: Date; }[] = [];
-                    if (newTagNames.length > 0) {
-                        newTags = await db.insert(tags).values(newTagNames.map(name => ({ name }))).returning();
-                    }
-
-                    const allTags = [...existingTags, ...newTags];
-
-                    await db.insert(postTags).values(allTags.map(tag => ({
-                        postId,
-                        tagId: tag.id,
-                    })));
-                }
-            }
-            return { success: true, postId };
+            return {
+                post,
+                ipfsUploaded: !!ipfsResult,
+            };
         }),
 
     confirmNftMint: protectedProcedure
@@ -198,92 +133,5 @@ export const postRouter = router({
             }).onConflictDoNothing();
 
             return { success: true };
-        }),
-
-    byId: publicProcedure
-        .input(z.object({ id: z.number() }))
-        .query(async ({ input }) => {
-            const post = await db.query.posts.findFirst({
-                where: eq(posts.id, input.id),
-                with: {
-                    user: true,
-                    postTags: {
-                        with: {
-                            tag: true,
-                        }
-                    }
-                },
-            });
-
-            if (!post) {
-                throw new TRPCError({
-                    code: "NOT_FOUND",
-                    message: "Post not found",
-                });
-            }
-
-            return post;
-        }),
-
-    read: protectedProcedure
-        .input(z.object({ postId: z.number() }))
-        .mutation(async ({ input, ctx }) => {
-            const userId = ctx.session.user.id;
-            const postId = input.postId;
-
-            const existingRead = await db.query.userReadPosts.findFirst({
-                where: and(
-                    eq(userReadPosts.userId, userId),
-                    eq(userReadPosts.postId, postId)
-                ),
-            });
-
-            if (existingRead) {
-                return { success: true, message: "Post already marked as read." };
-            }
-
-            await db.insert(userReadPosts).values({
-                userId,
-                postId,
-                createdAt: new Date(),
-            });
-
-            return { success: true };
-        }),
-
-    myPosts: protectedProcedure
-        .input(
-            z.object({
-                limit: z.number().min(1).max(100).optional().default(10),
-                offset: z.number().optional().default(0),
-            })
-        )
-        .query(async ({ input, ctx }) => {
-            const { limit, offset } = input;
-            const userId = ctx.session.user.id;
-
-            const postList = await db.query.posts.findMany({
-                limit,
-                offset,
-                orderBy: [desc(posts.createdAt)],
-                where: eq(posts.userId, userId),
-                with: {
-                    user: true,
-                    postTags: {
-                        with: {
-                            tag: true,
-                        }
-                    }
-                },
-            });
-
-            const totalPosts = await db.select({
-                count: count()
-            }).from(posts).where(eq(posts.userId, userId));
-
-            return {
-                posts: postList,
-                total: totalPosts[0].count,
-            };
         }),
 });

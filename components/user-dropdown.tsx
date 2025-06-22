@@ -8,7 +8,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { truncateWalletAddress } from "@/lib/utils"
-import { BookOpen, LogOut, Settings, User } from "lucide-react"
+import { LogOut, Settings, User } from "lucide-react"
 import Link from "next/link"
 import { EditProfileModal } from "./edit-profile-modal"
 import { UserAvatar } from "./user-avatar"
@@ -46,12 +46,6 @@ export function UserDropdown({ user, onLogout }: UserDropdownProps) {
                     <Link href={`/profile/${user.walletAddress}`}>
                         <User className="mr-2 h-4 w-4" />
                         <span>View your profile</span>
-                    </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                    <Link href={`/my-posts`}>
-                        <BookOpen className="mr-2 h-4 w-4" />
-                        <span>My posts</span>
                     </Link>
                 </DropdownMenuItem>
                 <EditProfileModal user={user}>

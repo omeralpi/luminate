@@ -25,6 +25,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         return <div>User not found</div>;
     }
 
+    console.log(user, walletAddress)
     const isOwnProfile = user.walletAddress === walletAddress;
 
     return (

@@ -1,12 +1,16 @@
 'use client';
 
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { CollectModal } from "@/components/collect-modal";
+import { PostUserSection } from "@/components/post-user-section";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ClientStellarService } from "@/lib/client-stellar-service";
+import { stellarExplorerUrl } from "@/lib/stellar";
 import { renderLexicalContent } from "@/lib/utils/render-lexical-content";
 import { trpc } from "@/trpc/client";
 import { isConnected } from "@stellar/freighter-api";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Loader2, ShareIcon, Wallet } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -129,7 +133,76 @@ export default function Page() {
     const canMintNFT = isAuthor && !post.nftMinted && post.ipfsHash;
 
     return (
-        <></>
+        <div className="py-6 space-y-6 max-w-[800px] mx-auto">
+            <img className="mx-auto w-full rounded-xl" src={post?.cover || ""} alt={post?.title || ""} />
+            <h1 className="text-4xl font-bold">{post?.title}</h1>
+            <div className="flex justify-between">
+                <PostUserSection post={post} />
+                <div className="flex gap-3">
+                    {canMintNFT && (
+                        <Button
+                            onClick={handleMintNFT}
+                            disabled={isMinting}
+                            className="gap-2"
+                            variant='secondary'
+                        >
+                            {isMinting ? (
+                                <>
+                                    <Loader2 className="size-4 animate-spin" />
+                                    Minting...
+                                </>
+                            ) : (
+                                <>
+                                    <Wallet className="size-4" />
+                                    Mint as NFT
+                                </>
+                            )}
+                        </Button>
+                    )}
+
+                    <CollectModal post={post}>
+                        <Button>
+                            Collect
+                        </Button>
+                    </CollectModal>
+
+                    <Button variant="outline" size="icon">
+                        <ShareIcon className="size-4" />
+                    </Button>
+                </div>
+            </div>
+            <p className="leading-relaxed text-lg text-muted-foreground" dangerouslySetInnerHTML={{ __html: contentHtml }} />
+            <Card className="bg-base-50">
+                <CardHeader>
+                    <CardTitle>
+                        Verification
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className="block border rounded-xl divide-y">
+                        {post?.gatewayUrl &&
+                            <VerificationItem
+                                label="PINATA TRANSACTION"
+                                value={post.gatewayUrl}
+                                href={post.gatewayUrl}
+                            />
+                        }
+                        <VerificationItem
+                            label="AUTHOR"
+                            value={post.user.walletAddress}
+                            href={`${stellarExplorerUrl}/accounts/${post.user.walletAddress}`}
+                        />
+                        {post.nftMinted && post.nftTransactionHash && (
+                            <VerificationItem
+                                label="NFT TRANSACTION"
+                                value={post.nftTransactionHash}
+                                href={`${stellarExplorerUrl}/transactions/${post.nftTransactionHash}`}
+                            />
+                        )}
+                    </div>
+                </CardContent>
+            </Card>
+        </div >
     )
 }
 
