@@ -5,6 +5,7 @@ import { useWallet } from "@/hooks/use-wallet";
 import { Moon, PencilLineIcon, Sun, TrophyIcon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { ClientOnly } from "./client-only";
 import { ConnectWalletButton } from "./connect-wallet-button";
 import { Logo } from "./logo";
 import { SearchForm } from "./search-form";
@@ -26,7 +27,9 @@ export function AppHeader() {
                     </Link>
 
                     <div className="flex-1">
-                        <SearchForm />
+                        <ClientOnly>
+                            <SearchForm />
+                        </ClientOnly>
                     </div>
 
                     <div className="flex items-center gap-2.5">

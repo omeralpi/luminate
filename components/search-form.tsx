@@ -1,26 +1,41 @@
 "use client"
 
 import { Search } from "lucide-react"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import * as React from "react"
+import { useDebounce } from "use-debounce"
 
 import { Input } from "@/components/ui/input"
 
 interface SearchFormProps {
-    onSearch?: (query: string) => void
     placeholder?: string
 }
 
 export function SearchForm({
-    onSearch,
     placeholder = "Search...",
 }: SearchFormProps) {
-    const [query, setQuery] = React.useState("")
+    const searchParams = useSearchParams()
+    const router = useRouter()
+    const pathname = usePathname()
+    const [query, setQuery] = React.useState(searchParams.get("search") || "")
+    const [debouncedQuery] = useDebounce(query, 500)
+
+    React.useEffect(() => {
+        const params = new URLSearchParams(window.location.search)
+        if (debouncedQuery) {
+            params.set("search", debouncedQuery)
+        } else {
+            params.delete("search")
+        }
+        router.replace(`${pathname}?${params.toString()}`)
+    }, [debouncedQuery, pathname, router])
+
+    React.useEffect(() => {
+        setQuery(searchParams.get('search') || '');
+    }, [searchParams]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        if (query.trim() && onSearch) {
-            onSearch(query.trim())
-        }
     }
 
     return (

@@ -1,35 +1,32 @@
 'use client';
 
-import { PostCard, PostCardSkeleton } from "@/components/post-card";
 import { SecretModal } from "@/components/secret-modal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { trpc } from "@/trpc/client";
 import { ArrowRightIcon } from "lucide-react";
+import dynamic from "next/dynamic";
+import Link from "next/link";
+
+const PostList = dynamic(() => import("@/components/post-list").then((mod) => mod.PostList), {
+    ssr: false,
+});
+
+function formatPostCount(count: number) {
+    if (count >= 1000) {
+        return `${(count / 1000).toFixed(1)}k posts`;
+    }
+    return `${count} posts`;
+}
 
 export default function Page() {
-    const { data: posts = [], isFetching } = trpc.post.list.useQuery();
+    const { data: hotTopics = [] } = trpc.tag.getHotTopics.useQuery({
+        limit: 5,
+    });
 
     return (
         <div className="flex divide-x">
-            <div className="flex-1 py-6 pr-8 flex flex-col">
-                <Tabs defaultValue="for-you">
-                    <TabsList>
-                        <TabsTrigger value="for-you">For you</TabsTrigger>
-                        <TabsTrigger value="subscriptions">Subscriptions</TabsTrigger>
-                    </TabsList>
-                </Tabs>
-                <div className="divide-y">
-                    {isFetching ? [...Array(10)].map((_, index) => (
-                        <PostCardSkeleton key={index} />
-                    )) : (
-                        posts.map((post) => (
-                            <PostCard key={post.id} post={post} />
-                        ))
-                    )}
-                </div>
-            </div>
+            <PostList />
             <div className="w-[400px] ">
                 <div className="p-6 bg-gradient-to-br from-purple-50 to-pink-100 border-b">
                     <div className="text-center space-y-4">
@@ -43,13 +40,13 @@ export default function Page() {
                             <p className="text-sm text-gray-600 mb-4">
                                 Answer 3 questions and get a special card
                             </p>
+                            <SecretModal>
+                                <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 rounded-lg transition-colors">
+                                    Tell me the secret
+                                    <ArrowRightIcon className="size-4 ml-2" />
+                                </Button>
+                            </SecretModal>
                         </div>
-                        <SecretModal>
-                            <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 rounded-lg transition-colors">
-                                Tell me the secret
-                                <ArrowRightIcon className="size-4 ml-2" />
-                            </Button>
-                        </SecretModal>
                     </div>
                 </div>
                 <div className="py-6 pl-8">
@@ -60,23 +57,22 @@ export default function Page() {
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                            {[
-                                { tag: "#JavaScript", posts: "2.5k posts", color: "bg-red-500" },
-                                { tag: "#React", posts: "1.8k posts", color: "bg-orange-500" },
-                                { tag: "#TypeScript", posts: "1.2k posts", color: "bg-yellow-500" },
-                                { tag: "#NextJS", posts: "890 posts", color: "bg-green-500" },
-                                { tag: "#TailwindCSS", posts: "654 posts", color: "bg-blue-500" },
-                            ].map((topic, index) => (
-                                <div key={index} className="flex items-center justify-between">
+                            {hotTopics.map((topic) => (
+                                <Link
+                                    key={topic.id}
+                                    href={`/?tag=${topic.name}`}
+                                    className="flex items-center justify-between px-2 p-3 -m-2 rounded-lg transition-colors hover:bg-muted"
+                                >
                                     <div className="flex items-center gap-3">
-                                        <div className={`w-2 h-2 ${topic.color} rounded-full`}></div>
-                                        <span className="text-sm font-medium">{topic.tag}</span>
+                                        <div className={`w-2 h-2 ${topic.color || 'bg-gray-500'} rounded-full`}></div>
+                                        <span className="text-sm font-medium">#{topic.name}</span>
                                     </div>
-                                    <span className="text-xs text-muted-foreground">{topic.posts}</span>
-                                </div>
+                                    <span className="text-xs text-muted-foreground">{formatPostCount(topic.postCount)}</span>
+                                </Link>
                             ))}
                         </CardContent>
-                    </Card></div>
+                    </Card>
+                </div>
             </div>
         </div>
     );
